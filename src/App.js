@@ -1,7 +1,11 @@
 import DiscPlayer from "./components/discPlayer/DiscPlayer";
 import { Leva, useControls } from "leva";
+import { WebcamCanvas } from "./components/webcamCanvas/WebcamCanvas";
+import { useState } from "react";
 
 function App() {
+  const [frame, setFrame] = useState({ canvas: null, counter: 0 });
+
   const controlValues = useControls({
     isSpinning: true,
     msPerFrame: { value: 70, min: 0, max: 400 },
@@ -12,6 +16,14 @@ function App() {
     <div className="app">
       <Leva collapsed="true" />
       <h1>Gardner Family Phenakistoscopes</h1>
+
+      <WebcamCanvas showVideo="true" setFrame={setFrame} grabInterval={80} />
+      <DiscPlayer
+        {...controlValues}
+        canvas={frame.canvas}
+        center={{ x: 0.502, y: 0.492 }}
+      />
+
       <div className="discs">
         {discs.map((d, i) => (
           <DiscPlayer key={i} {...d} {...controlValues} />

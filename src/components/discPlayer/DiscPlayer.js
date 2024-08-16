@@ -4,6 +4,7 @@ import styles from "./discPlayer.module.css";
 
 export default function DiscPlayer({
   url,
+  canvas,
   center,
   isSpinning,
   msPerFrame,
@@ -17,7 +18,7 @@ export default function DiscPlayer({
   const segAngle = 360 / segments;
 
   useInterval(() => {
-    if (!sourceImg) return;
+    if (!sourceImg && !canvas) return;
 
     setRotation((prev) => {
       let newRot = prev + segAngle;
@@ -29,7 +30,11 @@ export default function DiscPlayer({
       // for testing
       if (!isSpinning) newRot = 0;
 
-      drawRotatedCircle(canvasRef.current, sourceImg, newRot, center, size);
+      if (canvas) {
+        drawRotatedCircle(canvasRef.current, canvas, newRot, center, size);
+      } else {
+        drawRotatedCircle(canvasRef.current, sourceImg, newRot, center, size);
+      }
 
       return newRot;
     });
